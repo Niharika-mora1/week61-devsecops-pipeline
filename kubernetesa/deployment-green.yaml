@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: week61-green
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: week61
+      version: green
+  template:
+    metadata:
+      labels:
+        app: week61
+        version: green
+    spec:
+      containers:
+        - name: week61-app
+          image: week61-app:v2
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20
